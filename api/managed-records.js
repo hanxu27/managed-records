@@ -33,7 +33,7 @@ const retrieve = async (options = {}) => {
   const data = await fetchURI(
     window.path + `?limit=${options.limit}&offset=${offset}${colorString}`
   );
-  if (data.Error) return data.Error;
+  if (data.error) return data.error;
 
   data.forEach(entry => {
     const primaryColors = ["red", "blue", "yellow"];
@@ -64,7 +64,8 @@ let fetchURI = async path => {
       return res.json();
     })
     .catch(error => {
-      return { Error: error };
+      console.log(error);
+      return { error };
     });
 };
 
