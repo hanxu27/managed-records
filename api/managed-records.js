@@ -7,7 +7,6 @@ window.path = "http://localhost:3000/records";
 
 // Your retrieve function plus any additional functions go here ...
 const retrieve = async (options = {}) => {
-  console.log(options);
   options["limit"] = options["limit"] || 10;
   // will be bug if records are added or deleted
   maxDataLength = 500;
@@ -34,6 +33,7 @@ const retrieve = async (options = {}) => {
   const data = await fetchURI(
     window.path + `?limit=${options.limit}&offset=${offset}${colorString}`
   );
+  if (data.Error) return data.Error;
 
   data.forEach(entry => {
     const primaryColors = ["red", "blue", "yellow"];
@@ -55,13 +55,17 @@ const retrieve = async (options = {}) => {
   return output;
 };
 
-const fetchURI = async path => {
-  return await fetch(path).then(res => {
-    if (!res.ok) {
-      throw Error(response.statusText);
-    }
-    return res.json();
-  });
+let fetchURI = async path => {
+  return await fetch(path)
+    .then(res => {
+      if (!res.ok) {
+        throw Error(res.statusText);
+      }
+      return res.json();
+    })
+    .catch(error => {
+      return { Error: error };
+    });
 };
 
 export default retrieve;
