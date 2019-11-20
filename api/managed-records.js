@@ -9,7 +9,7 @@ window.path = "http://localhost:3000/records";
 const retrieve = async (options = {}) => {
   options["limit"] = options["limit"] || 10;
   // will be bug if records are added or deleted
-  maxDataLength = 500;
+  let maxDataLength = 500;
   let colorString = "";
   let output = { ids: [], open: [], closedPrimaryCount: 0 };
 
@@ -29,7 +29,6 @@ const retrieve = async (options = {}) => {
     output["previousPage"] = null;
     output["nextPage"] = 2;
   }
-
   const data = await fetchURI(
     window.path + `?limit=${options.limit}&offset=${offset}${colorString}`
   );
